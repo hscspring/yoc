@@ -2,9 +2,9 @@
 
 Generate your customized GitHub Year-in-Review report. Analyzes your engineering DNA, behaviors, and activity patterns to create a beautiful, shareable profile.
 
-**[Try it Live](https://yoc-nine.vercel.app)** *(Replace with your actual URL if deployed)*
+**[Try it Live](https://yoc-nine.vercel.app)** **[在线访问](https://yoc.huggingai.cn)** 
 
-![Screenshot](web/public/github-year-in-review-2025-hscspring.png) *(Preview placeholder)*
+![Screenshot](web/public/github-year-in-review-2025-hscspring.png) 
 
 ## Features ✨
 
