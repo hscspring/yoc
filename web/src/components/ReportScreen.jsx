@@ -1,10 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 import { useApp } from "../context/AppContext";
 import { generateNarrative } from "../services/llm";
-import { Copy, Share2, Calendar, GitCommit, GitPullRequest, MessageSquare, Zap, Activity, Award, Terminal, Languages, Download, Loader2, Moon, Sun, Sunrise, Sunset, Target, Repeat, Users, Zap as ZapIcon } from "lucide-react";
+import { Copy, Share2, Calendar, GitCommit, GitPullRequest, MessageSquare, Zap, Activity, Award, Terminal, Languages, Download, Loader2, Moon, Sun, Sunrise, Sunset, Target, Repeat, Users, Zap as ZapIcon, Globe, Gift } from "lucide-react";
 import clsx from "clsx";
 import { translations } from "../i18n/translations";
 import { domToPng } from 'modern-screenshot';
+
+const COLORS = {
+    blue: { text: "text-blue-400", bg: "bg-blue-500" },
+    green: { text: "text-green-400", bg: "bg-green-500" },
+    yellow: { text: "text-yellow-400", bg: "bg-yellow-500" },
+    orange: { text: "text-orange-400", bg: "bg-orange-500" },
+    pink: { text: "text-pink-400", bg: "bg-pink-500" },
+    indigo: { text: "text-indigo-400", bg: "bg-indigo-500" },
+    purple: { text: "text-purple-400", bg: "bg-purple-500" },
+    emerald: { text: "text-emerald-400", bg: "bg-emerald-500" },
+};
 
 const Card = ({ children, className }) => (
     <div className={clsx("bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 p-8 shadow-xl", className)}>
@@ -12,34 +23,40 @@ const Card = ({ children, className }) => (
     </div>
 );
 
-const Metric = ({ label, value, subtext, icon: Icon, color = "blue" }) => (
-    <div className="flex flex-col h-full justify-between">
-        <div className="flex items-center justify-between mb-4">
-            <span className="text-slate-400 text-xs font-medium uppercase tracking-wider">{label}</span>
-            {Icon && <Icon className={`w-5 h-5 text-${color}-400`} />}
+const Metric = ({ label, value, subtext, icon: Icon, color = "blue" }) => {
+    const theme = COLORS[color] || COLORS.blue;
+    return (
+        <div className="flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+                <span className="text-slate-400 text-xs font-medium uppercase tracking-wider">{label}</span>
+                {Icon && <Icon className={clsx("w-5 h-5", theme.text)} />}
+            </div>
+            <div>
+                <div className="text-3xl md:text-3xl font-bold text-white tracking-tight">{value}</div>
+                {subtext && <div className="text-sm text-slate-500 mt-1">{subtext}</div>}
+            </div>
         </div>
-        <div>
-            <div className="text-3xl md:text-3xl font-bold text-white tracking-tight">{value}</div>
-            {subtext && <div className="text-sm text-slate-500 mt-1">{subtext}</div>}
-        </div>
-    </div>
-);
+    );
+};
 
-const ScoreTile = ({ label, score, caption, icon: Icon, color }) => (
-    <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col justify-between h-full">
-        <div className="flex items-center justify-between mb-2">
-            <span className={`text-${color}-400 text-xs font-medium uppercase tracking-wider`}>{label}</span>
-            <Icon className={`w-4 h-4 text-${color}-400`} />
+const ScoreTile = ({ label, score, caption, icon: Icon, color }) => {
+    const theme = COLORS[color] || COLORS.blue;
+    return (
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col justify-between h-full">
+            <div className="flex items-center justify-between mb-2">
+                <span className={clsx("text-xs font-medium uppercase tracking-wider", theme.text)}>{label}</span>
+                <Icon className={clsx("w-4 h-4", theme.text)} />
+            </div>
+            <div>
+                <div className="text-4xl font-mono text-white tracking-tighter mb-1">{score}</div>
+                <div className="text-[10px] text-slate-500 font-medium leading-tight">{caption}</div>
+            </div>
+            <div className="h-1 w-full bg-white/5 rounded-full mt-3 overflow-hidden">
+                <div className={clsx("h-full rounded-full", theme.bg)} style={{ width: `${Math.min(score * 100, 100)}%` }}></div>
+            </div>
         </div>
-        <div>
-            <div className="text-4xl font-mono text-white tracking-tighter mb-1">{score}</div>
-            <div className="text-[10px] text-slate-500 font-medium leading-tight">{caption}</div>
-        </div>
-        <div className="h-1 w-full bg-white/5 rounded-full mt-3">
-            <div className={`h-full bg-${color}-500 rounded-full`} style={{ width: `${score * 100}%` }}></div>
-        </div>
-    </div>
-);
+    );
+};
 
 export default function ReportScreen() {
     const { pipelineState, llmConfig, language, viewer } = useApp();
@@ -372,8 +389,18 @@ export default function ReportScreen() {
 
                     </div>
 
-                    <footer className="text-center text-slate-600 text-sm py-12 mt-8 border-t border-white/5">
-                        <p>{t.generatedBy}</p>
+                    <footer className="flex flex-col items-center justify-center gap-4 py-8 mt-12 border-t border-white/5">
+                        <p className="text-slate-500 font-medium text-sm">{t.generatedBy}</p>
+                        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6 text-xs font-mono text-slate-600">
+                            <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                                <Globe className="w-3 h-3 text-blue-400" />
+                                <span>{language === 'zh' ? 'yoc.huggingai.cn' : 'yoc-nine.vercel.app'}</span>
+                            </div>
+                            <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                                <Gift className="w-3 h-3 text-purple-400" />
+                                <span>yam.gift</span>
+                            </div>
+                        </div>
                     </footer>
                 </div>
             </div>
