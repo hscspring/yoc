@@ -9,7 +9,7 @@ export default function InputScreen() {
     const t = translations[language] || translations['en'];
     const [inputToken, setInputToken] = useState('');
     const [baseUrl, setBaseUrl] = useState('https://api.qnaigc.com/v1');
-    const [apiKey, setApiKey] = useState('sk-f8fe975324429d483fee979c961ce5455948cf10437b20f929ebd983badc97bb');
+    const [apiKey, setApiKey] = useState('');
     const [model, setModel] = useState('gpt-oss-120b');
     const [year, setYear] = useState(2025);
     const [loading, setLoading] = useState(false);
